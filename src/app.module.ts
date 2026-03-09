@@ -7,6 +7,7 @@ import { HealthController } from './core/health/health.controller';
 import { AADStrategy } from './core/guards/authentication/aad.strategy';
 import { ConfigModule } from './core/config/config.module';
 import { LoggerModule } from './core/customLogger/customLogger.module';
+import { PostModule } from './models/post/post.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { LoggerModule } from './core/customLogger/customLogger.module';
     TypeormModule, // This import get the typeorm configuration, should be before the other modules.
     ThrottlerModule,
     LoggerModule,
+    PostModule,
   ],
   controllers: [HealthController],
   providers: [
