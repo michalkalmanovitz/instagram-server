@@ -1,0 +1,40 @@
+services:
+  app:
+    depends_on:
+      database:
+        required: true
+        condition: service_healthy
+    build: .
+    ports:
+      - '${PORT:-5216}:${PORT:-5216}'
+    env_file: './.env'
+    environment:
+      - CLIENT_URL=http://localhost:3000
+      - SERVER_URL=http://localhost:${PORT}
+      - DB_HOST=database
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=12345
+      - DB_DATABASE=postgres
+      - DB_SCHEMA=public
+      - DB_SYNCHRONIZE="true"
+    develop:
+      watch:
+        - path: src
+          action: rebuild
+
+  database:
+    image: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ~/apps/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -h database']
+      interval: 10s
+      timeout: 5s
+      retries: 5
