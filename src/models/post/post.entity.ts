@@ -8,10 +8,10 @@ import {
 } from 'typeorm';
 import { User } from '../user/user.entity';
 
-@Entity({ name: 'posts' })
+@Entity({ name: 'post' })
 export class Post {
   @PrimaryGeneratedColumn("uuid")
-  id: number;
+  id: string;
 
   @Column({ name: 'photo_src' })
   photoSrc: string;
@@ -20,7 +20,7 @@ export class Post {
   @JoinColumn({ name: 'user_name' })
   user: User;
 
-  @Column({ name: 'created_at' })
+  @Column({ name: 'created_at' , default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
   @ManyToMany(() => User, (user) => user.likedPosts)
