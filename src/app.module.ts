@@ -18,10 +18,7 @@ import { PostModule } from './models/post/post.module';
   ],
   controllers: [HealthController],
   providers: [
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
+    //* When adding a guard to AppModule, if you add it with `provide: APP_GUARD`, it will be global
   ],
 })
 export class AppModule {}

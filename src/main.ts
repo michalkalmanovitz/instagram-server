@@ -39,7 +39,7 @@ async function bootstrap() {
   app.useLogger(logger);
   app.useGlobalFilters(new HttpExceptionFilter(logger));
   app.useGlobalInterceptors(new LoggingInterceptor(logger));
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
   app.useGlobalInterceptors(new ErrorsInterceptor(logger));
   app.useGlobalInterceptors(new HeadersInterceptor());
   app.use(helmetConfig);

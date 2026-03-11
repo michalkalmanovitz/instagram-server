@@ -20,7 +20,7 @@ export class Post {
   @JoinColumn({ name: 'user_name' })
   user: User;
 
-  @Column({ name: 'created_at' })
+  @Column({ name: 'created_at' , default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
   @ManyToMany(() => User, (user) => user.likedPosts)
