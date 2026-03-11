@@ -24,15 +24,15 @@ export class PostController {
     this.logger.log('get posts by user:', username);
     return await this.postService.fetchByUser(username);
   }
-  @Patch('/:id/like')
-  async LikeToPost(@Param('id') id: string, @Body('user') user: User) {
-    this.logger.log('add like to post:', [id, user.name]);
-    return await this.postService.like(user, id);
+  @Patch('/:id/user/:username/like')
+  async LikeToPost(@Param('id') id: string, @Param('username') username: string) {
+    this.logger.log('add like to post:', [id, username]);
+    return await this.postService.like(username, id);
   }
-  @Patch('/:id/dislike')
-  async dislikeToPost(@Param('id') id: string, @Body('user') user: User) {
-    this.logger.log('remove like from post:', [id, user.name]);
-    return await this.postService.dislike(user, id);
+  @Patch('/:id/user/:username/dislike')
+  async dislikeToPost(@Param('id') id: string, @Param('username') username: string) {
+    this.logger.log('remove like from post:', [id, username]);
+    return await this.postService.dislike(username, id);
   }
   @Post('/new')
   async createPost(@Body() post: CreatePostDto) {

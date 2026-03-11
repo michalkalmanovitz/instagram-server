@@ -25,8 +25,8 @@ export class PostService {
   }
 
   async fetchByUser(username: string): Promise<Post[]> {
-    const userExists: boolean = await this.userService.findUser(username);
-    if (userExists) {
+    const user: User | null = await this.userService.fetchByName(username);
+    if (user) {
       const posts: Post[] = await this.postRepository.find({
         where: { user: { name: username } },
         relations: ['user', 'likedBy'],
@@ -39,9 +39,9 @@ export class PostService {
     return [];
   }
 
-  async like(user: User, postId: string): Promise<Post | null> {
-    const userExists: boolean = await this.userService.findUser(user.name);
-    if (userExists) {
+  async like(username: string, postId: string): Promise<Post | null> {
+    const user: User | null = await this.userService.fetchByName(username);
+    if (user) {
       const post: Post | null = await this.postRepository.findOne({
         where: { id: postId },
         relations: ['user', 'likedBy'],
@@ -49,7 +49,7 @@ export class PostService {
 
       if (post) {
         const alreadyLiked = post.likedBy.find(
-          (likedUser: User) => likedUser.name === user.name,
+          (likedUser: User) => likedUser.name === username,
         );
 
         if (!alreadyLiked) {
@@ -62,9 +62,9 @@ export class PostService {
     }
     return null;
   }
-  async dislike(user: User, postId: string): Promise<Post | null> {
-    const userExists: boolean = await this.userService.findUser(user.name);
-    if (userExists) {
+  async dislike(username: string, postId: string): Promise<Post | null> {
+    const user: User | null = await this.userService.fetchByName(username);
+    if (user) {
       const post: Post | null = await this.postRepository.findOne({
         where: { id: postId },
         relations: ['user', 'likedBy'],
@@ -89,7 +89,7 @@ export class PostService {
   }
 
   async create(newPost: CreatePostDto): Promise<Post | null> {
-    const user = await this.userService.fetchUser(newPost.userName);
+    const user = await this.userService.fetchByName(newPost.userName);
     if (user) {
       const post = this.postRepository.create({
         photoSrc: newPost.photoSrc,
