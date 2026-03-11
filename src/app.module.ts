@@ -4,7 +4,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { TypeormModule } from './core/typeorm/typeorm.module';
 import { ThrottlerModule } from './core/throttler/throttler.module';
 import { HealthController } from './core/health/health.controller';
-import { AADStrategy } from './core/guards/authentication/aad.strategy';
+// import { AADStrategy } from './core/guards/authentication/aad.strategy';
 import { ConfigModule } from './core/config/config.module';
 import { LoggerModule } from './core/customLogger/customLogger.module';
 import { PostModule } from './models/post/post.module';
@@ -20,10 +20,10 @@ import { PostModule } from './models/post/post.module';
   controllers: [HealthController],
   providers: [
     //* When adding a guard to AppModule, if you add it with `provide: APP_GUARD`, it will be global
-    {
-      provide: APP_GUARD,
-      useClass: AADStrategy,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: AADStrategy,
+    // },
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Post } from './post.entity';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class PostService {
@@ -11,6 +12,12 @@ export class PostService {
   ) {}
 
   async fetchAll(): Promise<Post[]> {
-    return await this.postRepository.find();
+    const posts: Post[] = await this.postRepository.find({
+      relations: ['user'],
+    });
+    posts.forEach((post) => {
+      post.likesCount = post.likedBy ? post.likedBy.length : 0;
+    });
+    return posts;
   }
 }

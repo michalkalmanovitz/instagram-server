@@ -8,12 +8,16 @@ import {
 } from 'typeorm';
 import { Post } from '../post/post.entity';
 
-@Entity({name: 'users'})
+@Entity({ name: 'user' })
 export class User {
   @PrimaryColumn()
   name: string;
 
-  @Column({ name: 'avatar_src' })
+  @Column({
+    name: 'avatar_src',
+    type: 'text',
+    default: '',
+  })
   avatarSrc: string;
 
   @OneToMany(() => Post, (post) => post.user)
