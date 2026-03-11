@@ -4,9 +4,6 @@ import Joi from 'joi';
 export const ConfigModule = Config.forRoot({
   isGlobal: true,
   validationSchema: Joi.object({
-    // AZURE_CLIENT_ID: Joi.string().required(),
-    // AZURE_TENANT_ID: Joi.string().required(),
-    // AZURE_CLIENT_SECRET: Joi.string().required(),
     CLIENT_URL: Joi.string().required(),
     SERVER_URL: Joi.string().required(),
     DB_HOST: Joi.string().required(),
