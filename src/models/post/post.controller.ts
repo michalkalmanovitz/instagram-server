@@ -18,4 +18,9 @@ export class PostController {
     return await this.postService.fetchAll();
   }
 
+  @Get('/user/:username')
+  async getPostsByUser(@Param('username') username: string) {
+    this.logger.log('get posts by user:', username);
+    return await this.postService.fetchByUser(username);
+  }
 }
