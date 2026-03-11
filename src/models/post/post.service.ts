@@ -13,7 +13,7 @@ export class PostService {
 
   async fetchAll(): Promise<Post[]> {
     const posts: Post[] = await this.postRepository.find({
-      relations: ['user'],
+      relations: ['user', 'likedBy'],
     });
     posts.forEach((post) => {
       post.likesCount = post.likedBy ? post.likedBy.length : 0;
