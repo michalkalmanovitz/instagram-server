@@ -61,4 +61,27 @@ export class PostService {
     }
     return null;
   }
+    async dislike(user: User, postId: string): Promise<Post | null> {
+    const userExists: boolean = await this.userService.findUser(user.name);
+    if (userExists) {
+      const post: Post | null = await this.postRepository.findOne({
+        where: { id: postId },
+        relations: ['user', 'likedBy'],
+      });
+
+      if (post) {
+        const alreadyLiked = post.likedBy.find(
+          (likedUser: User) => likedUser.name === user.name,
+        );
+
+        if (alreadyLiked) {
+          post.likedBy = post.likedBy.filter((likedUser: User) => likedUser.name !== user.name);
+        }
+        post.likesCount = post.likedBy.length;
+        await this.postRepository.save(post);
+      }
+      return post;
+    }
+    return null;
+  }
 }

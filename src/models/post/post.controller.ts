@@ -28,4 +28,9 @@ export class PostController {
     this.logger.log('add like to post:', [id, user.name]);
     return await this.postService.like(user, id);
   }
+  @Patch('/:id/dislike')
+  async dislikeToPost(@Param('id') id: string, @Body('user') user: User) {
+    this.logger.log('remove like from post:', [id, user.name]);
+    return await this.postService.dislike(user, id);
+  }
 }
