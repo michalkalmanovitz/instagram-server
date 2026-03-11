@@ -3,6 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { CustomLogger } from '../../core/customLogger/customLogger';
 import { PostService } from './post.service';
 import { User } from '../user/user.entity';
+import { CreatePostDto } from './create_post.dto';
 
 @ApiTags('posts')
 @Controller('posts')
@@ -32,5 +33,10 @@ export class PostController {
   async dislikeToPost(@Param('id') id: string, @Body('user') user: User) {
     this.logger.log('remove like from post:', [id, user.name]);
     return await this.postService.dislike(user, id);
+  }
+  @Post('/new')
+  async createPost(@Body() post: CreatePostDto) {
+    this.logger.log('create new post');
+    return await this.postService.create(post);
   }
 }

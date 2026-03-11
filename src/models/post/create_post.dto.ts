@@ -1,15 +1,7 @@
-import { User } from '../user/user.entity';
-
 export class CreatePostDto {
-
   photoSrc: string;
 
-  user: User;
+  userName: string;
 
-  createdAt: Date;
-
-  likedBy: User[];
-
-  likesCount: number;
-
+  createdAt?: Date;
 }

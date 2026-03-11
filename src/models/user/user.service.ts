@@ -16,4 +16,10 @@ export class UserService {
     });
     return user !== null;
   }
+
+  async fetchUser(username: string): Promise<User | null> {
+    return await this.userRepository.findOne({
+      where: { name: username },
+    }); 
+  }
 }

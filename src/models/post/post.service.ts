@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Post } from './post.entity';
 import { User } from '../user/user.entity';
 import { UserService } from '../user/user.service';
+import { CreatePostDto } from './create_post.dto';
 
 @Injectable()
 export class PostService {
@@ -61,7 +62,7 @@ export class PostService {
     }
     return null;
   }
-    async dislike(user: User, postId: string): Promise<Post | null> {
+  async dislike(user: User, postId: string): Promise<Post | null> {
     const userExists: boolean = await this.userService.findUser(user.name);
     if (userExists) {
       const post: Post | null = await this.postRepository.findOne({
@@ -75,12 +76,28 @@ export class PostService {
         );
 
         if (alreadyLiked) {
-          post.likedBy = post.likedBy.filter((likedUser: User) => likedUser.name !== user.name);
+          post.likedBy = post.likedBy.filter(
+            (likedUser: User) => likedUser.name !== user.name,
+          );
         }
         post.likesCount = post.likedBy.length;
         await this.postRepository.save(post);
       }
       return post;
+    }
+    return null;
+  }
+
+  async create(newPost: CreatePostDto): Promise<Post | null> {
+    const user = await this.userService.fetchUser(newPost.userName);
+    if (user) {
+      const post = this.postRepository.create({
+        photoSrc: newPost.photoSrc,
+        user,
+        createdAt: newPost.createdAt ?? new Date(),
+      });
+
+      return this.postRepository.save(post);
     }
     return null;
   }
