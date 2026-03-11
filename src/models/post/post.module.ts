@@ -3,11 +3,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Post } from './post.entity';
 import { PostController } from './post.controller';
 import { PostService } from './post.service';
+import { UserModule } from '../user/user.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Post]), // ✅ THIS IS REQUIRED
-  ],
+  imports: [TypeOrmModule.forFeature([Post]), UserModule],
   controllers: [PostController],
   providers: [PostService],
   exports: [PostService],
