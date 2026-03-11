@@ -1,8 +1,8 @@
-import { Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CustomLogger } from '../../core/customLogger/customLogger';
 import { PostService } from './post.service';
-import { Post as postEntity } from './post.entity';
+import { User } from '../user/user.entity';
 
 @ApiTags('posts')
 @Controller('posts')
@@ -16,12 +16,16 @@ export class PostController {
   async getAllPosts() {
     this.logger.log('get all posts');
     return await this.postService.fetchAll();
-  }  
+  }
 
   @Get('/user/:username')
   async getPostsByUser(@Param('username') username: string) {
     this.logger.log('get posts by user:', username);
     return await this.postService.fetchByUser(username);
   }
-
+  @Patch('/:id/like')
+  async LikeToPost(@Param('id') id: string, @Body('user') user: User) {
+    this.logger.log('add like to post:', [id, user.name]);
+    return await this.postService.like(user, id);
+  }
 }
