@@ -2,6 +2,7 @@ import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CustomLogger } from '../../core/customLogger/customLogger';
 import { PostService } from './post.service';
+import { PostLogic } from './post.logic';
 import { User } from '../user/user.entity';
 import { CreatePostDto } from './create_post.dto';
 
@@ -10,33 +11,44 @@ import { CreatePostDto } from './create_post.dto';
 export class PostController {
   constructor(
     private readonly postService: PostService,
+    private readonly postLogic: PostLogic,
     private readonly logger: CustomLogger,
   ) {}
 
   @Get()
   async getAllPosts() {
     this.logger.log('get all posts');
-    return await this.postService.fetchAll();
+    return await this.postLogic.getAll();
   }
 
   @Get('/user/:username')
   async getPostsByUser(@Param('username') username: string) {
     this.logger.log('get posts by user:', username);
-    return await this.postService.fetchByUser(username);
+    return await this.postLogic.getByUser(username);
   }
+
   @Patch('/:id/user/:username/like')
-  async LikeToPost(@Param('id') id: string, @Param('username') username: string) {
+  async LikePost(@Param('id') id: string, @Param('username') username: string) {
     this.logger.log('add like to post:', [id, username]);
-    return await this.postService.like(username, id);
+    return this.postLogic.changeLikeStatus(username, id, this.postLogic.like);
   }
+
   @Patch('/:id/user/:username/dislike')
-  async dislikeToPost(@Param('id') id: string, @Param('username') username: string) {
+  async dislikePost(
+    @Param('id') id: string,
+    @Param('username') username: string,
+  ) {
     this.logger.log('remove like from post:', [id, username]);
-    return await this.postService.dislike(username, id);
+    return this.postLogic.changeLikeStatus(
+      username,
+      id,
+      this.postLogic.dislike,
+    );
   }
+
   @Post('/new')
   async createPost(@Body() post: CreatePostDto) {
     this.logger.log('create new post');
-    return await this.postService.create(post);
+    return await this.postLogic.createPost(post);
   }
 }
