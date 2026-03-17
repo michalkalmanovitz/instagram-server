@@ -7,6 +7,7 @@ import { HealthController } from './core/health/health.controller';
 import { ConfigModule } from './core/config/config.module';
 import { LoggerModule } from './core/customLogger/customLogger.module';
 import { PostModule } from './models/post/post.module';
+import { UserModule } from './models/user/user.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { PostModule } from './models/post/post.module';
     ThrottlerModule,
     LoggerModule,
     PostModule,
+    UserModule,
   ],
   controllers: [HealthController],
   providers: [
