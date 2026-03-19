@@ -55,12 +55,11 @@ export class PostLogic {
       (likedUser) => likedUser.name === username,
     );
 
-    if (changingLogic === this.like && !alreadyLiked) {
-      this.like(post, user);
-    }
-
-    if (changingLogic === this.dislike && alreadyLiked) {
-      this.dislike(post, user);
+    if (
+      (changingLogic === this.like && !alreadyLiked) ||
+      (changingLogic === this.dislike && alreadyLiked)
+    ) {
+      changingLogic(post, user);
     }
 
     post.likesCount = post.likedBy.length;
