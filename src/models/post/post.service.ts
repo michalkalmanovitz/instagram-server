@@ -20,6 +20,7 @@ export class PostService {
   async fetchAll(): Promise<Post[]> {
     return await this.postRepository.find({
       relations: ['user', 'likedBy'],
+      order: { createdAt: 'DESC' },
     });
   }
 
@@ -29,6 +30,7 @@ export class PostService {
     return await this.postRepository.find({
       where: { user: { name: user.name } },
       relations: ['user', 'likedBy'],
+      order: { createdAt: 'DESC' },
     });
   }
 
