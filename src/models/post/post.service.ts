@@ -18,43 +18,47 @@ export class PostService {
   ) {}
 
   async fetchAll(): Promise<Post[]> {
-    return await this.postRepository.find({
+    const posts = await this.postRepository.find({
       relations: ['user', 'likedBy'],
       order: { createdAt: 'DESC' },
     });
+    return posts;
   }
 
   async fetchByUser(username: string): Promise<Post[]> {
     const user = await this.userService.fetchByName(username);
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
 
-    return await this.postRepository.find({
+    const posts = await this.postRepository.find({
       where: { user: { name: user.name } },
       relations: ['user', 'likedBy'],
       order: { createdAt: 'DESC' },
     });
+    return posts;
   }
 
-  async fetchById(postId: string): Promise<Post> {
+  async fetchById(postId: string): Promise<Post|null> {
     const post: Post | null = await this.postRepository.findOne({
       where: { id: postId },
       relations: ['user', 'likedBy'],
     });
     console.log(post);
-    if (post == null) {
-      throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
-    }
     return post;
   }
 
   async savePost(post: Post): Promise<Post> {
-    return await this.postRepository.save(post);
+    const savedPost = await this.postRepository.save(post);
+    return savedPost;
   }
 
-  async createPost(newPost: CreatePostDto, user: User): Promise<Post> {
-    return await this.postRepository.create({
+  async createPost(newPost: CreatePostDto, username: string): Promise<Post> {
+    const post = await this.postRepository.create({
       photoSrc: newPost.photoSrc,
-      user: user,
+      user: { name: username },
       createdAt: newPost.createdAt ?? new Date(),
     });
+    return post;
   }
 }

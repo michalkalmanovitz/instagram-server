@@ -16,6 +16,7 @@ export class UserController {
   @Get(':username')
   async getUser( @Param('username') username: string) {
     this.logger.log(`get user named ${username}`);
-    return await this.userLogic.getByName(username);
+    const user = await this.userLogic.getByName(username);
+    return user;
   }
 }

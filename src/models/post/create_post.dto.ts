@@ -1,3 +1,5 @@
+import { Post } from './post.entity';
+
 export class CreatePostDto {
   photoSrc: string;
 
@@ -5,3 +7,11 @@ export class CreatePostDto {
 
   createdAt?: Date;
 }
+
+
+
+export type PostType = Post & likesCount;
+
+type likesCount = {
+  likesCount: number;
+};

@@ -18,7 +18,8 @@ export class PostController {
   @Get()
   async getAllPosts() {
     this.logger.log('get all posts');
-    return await this.postLogic.getAll();
+    const posts = await this.postLogic.getAll();
+    return posts;
   }
 
   @Get('/user/:username')
@@ -30,7 +31,8 @@ export class PostController {
   @Patch('/:id/user/:username/like')
   async LikePost(@Param('id') id: string, @Param('username') username: string) {
     this.logger.log('add like to post:', [id, username]);
-    return this.postLogic.changeLikeStatus(username, id, this.postLogic.like);
+    const result = await this.postLogic.changeLikeStatus(username, id, this.postLogic.like);
+    return result;
   }
 
   @Patch('/:id/user/:username/dislike')
@@ -39,16 +41,18 @@ export class PostController {
     @Param('username') username: string,
   ) {
     this.logger.log('remove like from post:', [id, username]);
-    return this.postLogic.changeLikeStatus(
+    const result = await this.postLogic.changeLikeStatus(
       username,
       id,
       this.postLogic.dislike,
     );
+    return result;
   }
 
   @Post('/new')
   async createPost(@Body() post: CreatePostDto) {
     this.logger.log('create new post');
-    return await this.postLogic.createPost(post);
+    const newPost = await this.postLogic.createPost(post);
+    return newPost;
   }
 }

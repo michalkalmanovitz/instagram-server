@@ -25,6 +25,4 @@ export class Post {
 
   @ManyToMany(() => User, (user) => user.likedPosts)
   likedBy: User[];
-
-  likesCount: number;
 }

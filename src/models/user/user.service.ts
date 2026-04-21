@@ -13,18 +13,11 @@ export class UserService {
     private readonly logger: CustomLogger,
   ) {}
 
-  async fetchByName(username: string): Promise<User> {
+  async fetchByName(username: string): Promise<User | null> {
     const user: User | null = await this.userRepository.findOne({
       where: { name: username },
     });
-
-    if (user) {
-      return user;
-    } else {
-      throw new HttpException(
-        `User ${username} not found`,
-        HttpStatus.NOT_FOUND,
-      );
-    }
+    
+    return user;
   }
 }

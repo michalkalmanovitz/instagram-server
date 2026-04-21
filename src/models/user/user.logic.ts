@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ResponseWrapper } from 'src/core/utils/ResponseWrapper';
 import { User } from './user.entity';
 import { UserService } from './user.service';
@@ -10,8 +10,11 @@ export class UserLogic {
   ) {}
 
   async getByName(username:string): Promise<ResponseWrapper<User>> {
-    const user: User = await this.userService.fetchByName(username);
-
-    return new ResponseWrapper(user);
+    const user = await this.userService.fetchByName(username);
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+    const response = new ResponseWrapper(user);
+    return response;
   }
 }
